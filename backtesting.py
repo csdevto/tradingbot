@@ -7,11 +7,11 @@ import time, datetime, math
 from datetime import datetime
 import sqlite3
 
-con = sqlite3.connect("/Users/christiansierra/Desktop/alg/DB/stocks.db")
+con = sqlite3.connect("DB/stocks.db")
 #con.row_factory = sqlite3.Row
-#stocks = ['eark.ne']
-data = pd.read_sql_query("select DISTINCT symbol FROM stocks_hist",con)
-stocks = data['symbol']
+stocks = ['UBER']
+#data = pd.read_sql_query("select DISTINCT symbol FROM stocks_hist",con)
+#stocks = data['symbol']
 #['UBER','FLT.V','TSLA','eark.ne','rci-b.to','SNDL','PLTR','PBR',"AAL",'A','AAL','AAP','AAPL','ABBV','ABC','ABMD','ABT','ACN','ADBE','ADI','ADM','ADP','ADSK','AEE','AEP','AES','AFL','AIG','AIZ','AJG','AKAM','ALB','ALGN','ALK','ALL','ALLE','ALXN','AMAT','AMCR','AMD','AME','AMGN','AMP','AMT','AMZN','ANET','ANSS','ANTM','AON','AOS','APA','APD','APH','APTV','ARE','ATO','ATVI','AVB','AVGO','AVY','AWK','AXP','AZO','BA','BAC','BAX','BBY','BDX','BEN','BF-B','BIIB','BIO','BK','BKNG','BKR','BLK','BLL','BMY','BR','BRK-B','BSX','BWA','BXP','C','CAG','CAH','CARR','CAT','CB','CBOE','CBRE','CCI','CCL','CDNS','CDW','CE','CERN','CF','CFG','CHD','CHRW','CHTR','CI','CINF','CL','CLX','CMA','CMCSA','CME']
 #,'FLT.V','TSLA','eark.ne','rci-b.to','BTC-USD'
 ##AMD AND INTEL DOING BEST
@@ -28,9 +28,9 @@ per=[]
 
 for stock in stocks:
 	
-	data = pd.read_sql_query("SELECT * FROM stocks_hist WHERE symbol='" + stock + "' ORDER BY Datetime ASC ",con,index_col='Datetime')
-	data.index = pd.to_datetime(data.index)
-	print(data)
+	data = pd.read_sql_query("SELECT * FROM stocks_hist WHERE symbol='" + stock + "' ORDER BY Datetime DESC limit 100 ",con,index_col='Datetime')
+	data.sort_index()
+	#print(data)
 	#data = yf.download(tickers=stock, period='5d', interval='1m',progress=False)
 	#RSI CALC
 	data['Return'] = np.log(data['Close'] / data['Close'].shift(1) )
@@ -109,7 +109,7 @@ for stock in stocks:
 				per.append((((StartBal/sl)-1)*100))
 				#print(f"{index} - SOLD - Balance {StartBal} % Made {(((StartBal/sl)-1)*100)}")'''
 
-			if buy  == 0 and row['RSI'] <= 5 and LastRSI < row['RSI'] and LastClose < row['Close'] and row['AD'] < row['Close'] and row['Close']>LastLB and row['Close']>row['Lower'] and row['Close']<row['Lower1s']:
+			if buy  == 0 and row['RSI'] <= 30 and LastRSI < row['RSI'] and LastClose < row['Close'] and row['AD'] < row['Close'] and row['Close']>LastLB and row['Close']>row['Lower'] and row['Close']<row['Lower1s']:
 				sl = StartBal
 				Nshares = math.floor(StartBal / row['Close'])
 				StartBal -= row['Close'] * Nshares

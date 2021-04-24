@@ -6,8 +6,8 @@ import yfinance as yf
 import time, datetime
 import sqlite3
 
-con = sqlite3.connect("/Users/christiansierra/Desktop/alg/DB/stocks.db")
-#stocks = ['NIO']
+con = sqlite3.connect("DB/stocks.db")
+#stocks = ['bce.to']
 data = pd.read_sql_query("select DISTINCT symbol FROM stocks_hist",con)
 stocks = data['symbol']
 for stock in stocks: 
