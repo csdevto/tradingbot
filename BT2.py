@@ -4,7 +4,7 @@ import MarketData as MD
 
 
 #stock to test
-stocks = ['BCE.TO']
+stocks = ['UBER']
 
 #set parameters to start
 #trading balance
